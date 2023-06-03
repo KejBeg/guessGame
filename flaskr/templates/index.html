@@ -1,15 +1,51 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <ul>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Playing filed
+            </th>
+            <th>
+                Correct Place
+            </th>
+            <th>
+                Incorrect place
+            </th>
+        </tr>
+    </thead>
+    <tbody>
         {% for i in numOfRows %}
-            <li>
-                <form>
-                    {% for j in numOfInputs %}
-                        <input class="letter-input" oninput="moveFocus(); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
-                    {% endfor %}
-                </form>
-            </li>
+            <tr>
+                <td>
+                    {% if i == enabledInput %}
+                        <form name="letter-form-{{i}}" id="letter-form-{{i}}" class="letter-form" action="/verify" method="post" disabled>
+                    {% else %}
+                        <form name="letter-form-{{i}}" id="letter-form-{{i}}" class="letter-form" action="/verify" method="post">
+                    {% endif %}
+                        {% for j in numOfInputs %}
+                            {% if i == enabledInput %}
+                                <input class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+                                {% elif i < enabledInput%}
+                                <input placeholder="{{allSubmittedCodes[i][j]}}" disabled class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+                                {% else %}
+                                <input disabled class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+                                {% endif %}
+                            {% endfor %}
+                            {% if i == enabledInput %}
+                                <input type="submit" value="Check" id="{{i}}">
+                            {% endif %}
+                    </form>
+                </td>
+                <td class="correct-place">
+                    {{correctPlaces[i]}}
+                </td>
+                <td class="wrong-place">
+                    {{wrongPlaces[i]}}
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+    </tbody>
+</table>
 {% endblock body %}

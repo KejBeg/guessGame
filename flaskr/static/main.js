@@ -10,16 +10,17 @@ function checkInput(element){
     }
 }
 
-
 focusIndex = 1
-function moveFocus(){
+function moveFocus(enabledInput){
     element = document.getElementsByClassName("letter-input")
-    console.log(element);
 
-    if (focusIndex >= element.length){
+    if (focusIndex >= element.length + enabledInput*4){
+        return
+    }
+    if (focusIndex % 4 == 0){
         return
     }
 
-    element[focusIndex].focus()
+    element[focusIndex + enabledInput*4].focus()
     focusIndex++
 }
