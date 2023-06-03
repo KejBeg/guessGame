@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <ul>
+        {% for i in numOfRows %}
+            <li>
+                <form>
+                    {% for j in numOfInputs %}
+                        <input class="letter-input" oninput="moveFocus(); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+                    {% endfor %}
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock body %}
