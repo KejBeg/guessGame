@@ -1,3 +1,45 @@
-li{
-    list-style: none;
+body{
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+section{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(14, 16, 17);
+}
+
+#game-table{
+    display: inline-block;  
+    width: 100%;
+    height: fit-content;
+}
+
+.wrong-place{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.correct-place{
+    justify-content: center;
+    align-content: center;    
+}
+
+#login{
+    display: flex;
+    justify-content: flex-end;
+    width: fit-content;
+    height: fit-content;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    background-color: white;
+    width: 100vw;
+    height: fit-content;
 }

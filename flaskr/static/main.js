@@ -1,3 +1,10 @@
+
+/**
+ * Used to ensure the input is not out of possible Values
+ * 
+ * @param element 
+ */
+
 function checkInput(element){
     if (element.value == ""){
         return
@@ -10,6 +17,11 @@ function checkInput(element){
     }
 }
 
+/**
+ * Focuses on the next Input
+ * 
+ * @param enabledInput int, for focusing on precise input
+ */
 focusIndex = 1
 function moveFocus(enabledInput){
     element = document.getElementsByClassName("letter-input")
