@@ -1,5 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-You lost
+<div id="gameOver-container">
+    <div>You have lost</div>
+    <div>Winning code: {% for code in gameCode%}{{code}}{% endfor %}</div>
+    <div>UserName: {{loginName}}</div>
+    <form action="/">
+        <input type="submit" value="Try Again">
+    </form>
+</div>
 {% endblock body %}

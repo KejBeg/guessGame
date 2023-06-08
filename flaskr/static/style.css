@@ -1,45 +1,129 @@
-body{
-    margin: 0;
-    padding: 0;
-    color: white;
+/* Global styles */
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
 }
 
-section{
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgb(14, 16, 17);
+body {
+font-family: Arial, sans-serif;
+background-color: #f2f2f2;
 }
 
-#game-table{
-    display: inline-block;  
-    width: 100%;
-    height: fit-content;
+.container {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
 }
 
-.wrong-place{
-    display: flex;
-    justify-content: center;
-    align-content: center;
-}
-.correct-place{
-    justify-content: center;
-    align-content: center;    
+h1 {
+text-align: center;
+margin-bottom: 20px;
 }
 
-#login{
-    display: flex;
-    justify-content: flex-end;
-    width: fit-content;
-    height: fit-content;
+/* Navbar */
+#navbar {
+background-color: #fff;
+padding: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-nav{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    color: black;
-    background-color: white;
-    width: 100vw;
-    height: fit-content;
+#navbar form {
+display: inline-block;
+margin-left: 10px;
+}
+
+#navbar input[type="submit"] {
+background-color: #4CAF50;
+color: white;
+border: none;
+padding: 8px 16px;
+text-decoration: none;
+cursor: pointer;
+}
+
+#login-name {
+margin-right: 10px;
+}
+
+/* Game table */
+#table-container {
+margin-top: 20px;
+}
+
+#game-table {
+width: 100%;
+border-collapse: collapse;
+}
+
+#game-table th,
+#game-table td {
+padding: 10px;
+text-align: center;
+}
+
+#game-table th {
+background-color: #f2f2f2;
+}
+
+#game-table .correct-place {
+background-color: #4CAF50;
+color: white;
+}
+
+#game-table .wrong-place {
+background-color: #ff9800;
+color: white;
+}
+
+.letter-form {
+display: flex;
+align-items: center;
+width: 25vw;
+flex-grow: 1;
+}
+
+.letter-input {
+width: fit-content;
+height: 40px;
+margin-right: 10px;
+text-align: center;
+border: 1px solid #ccc;
+border-radius: 5px;
+font-size: 18px;
+}
+
+.game-table-submit{
+    width: 80px;
+    height: 40px;
+    font-size: medium;
+}
+
+.letter-input:focus {
+outline: none;
+border-color: #4CAF50;
+box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+/* Additional styling for the comforting effect */
+body {
+background-image: linear-gradient(to bottom, #fff, #f2f2f2);
+}
+
+.container {
+background-color: #fff;
+border-radius: 5px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#navbar {
+border-bottom: 1px solid #ccc;
+margin-bottom: 20px;
+}
+
+#reset input[type="submit"] {
+background-color: #ccc;
 }

@@ -75,12 +75,17 @@ def verify():
     
     for i in rangeOfInputs:
         # Assigns the requested letters to our var
-        submittedCode[i] = int(request.form.get(f"letter-input-{enabledInput}-{i}"))
-        
-        if submittedCode[i] < minValue or submittedCode[i] > maxValue:
+        try:
+            submittedCode[i] = int(request.form.get(f"letter-input-{enabledInput}-{i}"))
+        except:
+            session["errorMessage"] = "Atleast one input is missing"
             return redirect("/error")
-        if submittedCode[i] == None:
-            return  redirect("/error")
+        # Check if user has inputted into every input 
+        
+        # Check if user
+        if submittedCode[i] < minValue or submittedCode[i] > maxValue:
+            session["errorMessage"] = "You have tampered with JS or HTML"
+            return redirect("/error")
         
         # Checks the values and increments correctPlaces
         if submittedCode[i] == gameCode[i]:
@@ -99,15 +104,22 @@ def verify():
     # Increments the current used row
     enabledInput +=1
 
+    # Getting the name
+    if not session.get("loginName"):
+        name = "Anonymous"
+    else:
+        name = session.get("loginName")
+
     # Redirects to a Winner page if the game was WON
     if gameCode in allSubmittedCodes:
         session["resetState"] = "gameWon"
+        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount) VALUES (?, ?, ?)", (name, 1, enabledInput))
+        con.commit()
         return redirect("/reset")
-    else:
-        if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
-            print(allSubmittedCodes)
-            session["resetState"] = "gameLost"
-            return redirect("/reset")
+    if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
+        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount) VALUES (?, ?, ?)", (name, 0, enabledInput))
+        session["resetState"] = "gameLost"
+        return redirect("/reset")
 
     # Returns back to index if the game wasnt won
     return redirect("/")    
@@ -123,14 +135,10 @@ def error():
 def gameWon():
     if session.get("resetState") != "gameWon":
         return redirect("/")
-    if not session.get("loginName"):
-        name = "Anonymous"
-    else:
-        name = session.get("loginName")
-    cur.execute("INSERT INTO scoreboard (name, wonState, tryCount) VALUES (?, ?, ?)", (name, 1, enabledInput))
-    con.commit()
     session["resetState"] = None
-    return render_template("/gameWon.html")
+    return render_template("/gameWon.html", loginName=session.get("gameData")["loginName"],\
+    gameCode=session.get("gameData")["gameCode"], tryCount=session.get("gameData")["tryCount"],\
+    maxTries=session.get("gameData")["maxTries"])
 
 # TODO
 @app.route("/gameLost")
@@ -146,6 +154,15 @@ def reset():
     global correctPlaces
     global wrongPlaces
     global enabledInput
+
+    # Saving the data
+    session["gameData"] = {
+        "loginName": session.get("loginName"),
+        "gameCode": gameCode,
+        "tryCount": enabledInput,
+        "maxTries": numOfRows,
+    }
+
     allSubmittedCodes = [[0]*numOfInputs for i in rangeOfRows] 
     correctPlaces = [0 for i in rangeOfRows] 
     wrongPlaces = [0 for i in rangeOfRows] 

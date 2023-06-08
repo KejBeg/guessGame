@@ -1,0 +1,12 @@
+#gameOver-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-bottom: 50%;
+    width: 100vw;
+    height: max-content;
+    justify-content: center;
+    align-content: center;
+    font-size: 30px;
+    text-align: center;
+}

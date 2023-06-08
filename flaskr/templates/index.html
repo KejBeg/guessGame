@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<span id="table-container">
 <table id="game-table">
     <thead id="game-table-head">
     <tr>
@@ -39,40 +40,22 @@
             {% endif %}
             {% endfor %}
             {% if i == enabledInput %}
-            <input type="submit" value="Check" id="{{i}}">
+            <input type="submit" value="Check" id="{{i}}" class="game-table-submit">
             {% endif %}
             </form>
         </td>
-        <td class="correct-place">
+        <td class="correct-place places">
             {{correctPlaces[i]}}
         </td>
-        <td class="wrong-place">
+        <td class="wrong-place places">
             {{wrongPlaces[i]}}
         </td>
     </tr>
+    
     {% endfor %}
 </tbody>
 </table>
-<nav>
-<span id="reset">
-        <form action="/reset">
-            <input type="submit" value="Reset">
-        </form>
-    </span>
-    
-    <span id="login">
-    {% if loginName == None %}
-    <form action="/login" method="post" name="login-form" id="login-form">
-        <input type="text" name="login-name" placeholder="Name">
-        <input type="submit" value="Login">
-    </form>
-    {% else %}
-    <form action="/logout" method="post" id="login-form">
-        <span id="login-name">You are logged in as {{loginName}}</span>
-        <input type="submit" value="Logout">
-    </form>
-    {% endif %}
-</span>
-</nav>
+</div>
+
 
 {% endblock body %}
