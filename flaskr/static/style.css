@@ -1,8 +1,13 @@
-/* Global styles */
+@font-face {
+    font-family: 'Cascadia Code';
+    src: url('https://cdn.jsdelivr.net/npm/@fontsource/cascadia-code/files/cascadia-code-400-normal.woff2') format('woff2');
+}
+
 * {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
+font-family: "Cascadia Code";
 }
 
 body {
@@ -10,46 +15,16 @@ font-family: Arial, sans-serif;
 background-color: #f2f2f2;
 }
 
-.container {
-max-width: 800px;
-margin: 0 auto;
-padding: 20px;
-}
-
-h1 {
-text-align: center;
-margin-bottom: 20px;
-}
-
-/* Navbar */
 #navbar {
 background-color: #fff;
 padding: 10px;
 display: flex;
 justify-content: space-between;
-align-items: center;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#navbar form {
-display: inline-block;
+display: flex;
+flex-flow: row-reverse;
 margin-left: 10px;
 }
 
-#navbar input[type="submit"] {
-background-color: #4CAF50;
-color: white;
-border: none;
-padding: 8px 16px;
-text-decoration: none;
-cursor: pointer;
-}
-
-#login-name {
-margin-right: 10px;
-}
-
-/* Game table */
 #table-container {
 margin-top: 20px;
 }
@@ -119,11 +94,46 @@ border-radius: 5px;
 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-#navbar {
-border-bottom: 1px solid #ccc;
-margin-bottom: 20px;
+#navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 24px;
+    width: 100vw;
+    height: 64px;
 }
 
-#reset input[type="submit"] {
-background-color: #ccc;
+#navbar input{
+    width: 50px;
+    height: 30px;
+}
+
+#reset{
+    margin-left: 25px;
+}
+
+#scoreboard input{
+    width: 100px;
+}
+
+#login{
+    margin-right: 25px;
+}
+
+#gameOver-container{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	margin-bottom: 50%;
+	width: 100vw;
+	height: max-content;
+	justify-content: center;
+	align-content: center;
+	font-size: 30px;
+	text-align: center;
+}
+
+#scoreboard-container{
+
 }

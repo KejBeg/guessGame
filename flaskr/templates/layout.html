@@ -4,17 +4,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
-    <link rel="stylesheet" href="static/gameOverStyle.css">
     <script src="static/main.js" defer></script>
     <title>Excel game</title>
 </head>
 <body>
     <section id="main-section">
-        <header id="navbar">
-            <nav>
+            <nav id="navbar">
             <span id="reset">
                     <form action="/reset">
                         <input type="submit" value="Reset">
+                    </form>
+                </span>
+                
+                <span id="scoreboard">
+                    <form action="/scoreboard">
+                        <input type="submit" value="Scoreboard">
                     </form>
                 </span>
                 
@@ -26,13 +30,12 @@
                 </form>
                 {% else %}
                 <form action="/logout" method="post" id="login-form">
-                    <span id="login-name">You are logged in as {{loginName}}</span>
+                    <span id="login-name">{{loginName}}</span>
                     <input type="submit" value="Logout">
                 </form>
                 {% endif %}
             </span>
         </nav>
-        </header>
         {% block body %}
     
         {% endblock body %}

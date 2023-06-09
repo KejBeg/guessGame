@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div id="scoreboard-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Tries</th>
+                    <th>Winning code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(scoreboardNames|length)%}
+                    <tr>
+                        <td>{{scoreboardNames[i]}}</td>
+                        <td>{{scoreboardAmountOfTries[i]}}/{{maxTries}}</td>
+                        <td>{{scoreboardWinningCode[i]}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

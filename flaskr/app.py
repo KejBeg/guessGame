@@ -16,7 +16,7 @@ cur = con.cursor()
 
 # Creating table if one was not created
 tableName = "scoreboard"
-cur.execute("CREATE TABLE IF NOT EXISTS scoreboard (id INTEGER PRIMARY KEY,name TEXT, wonState ID,tryCount INT)")
+cur.execute("CREATE TABLE IF NOT EXISTS scoreboard (id INTEGER PRIMARY KEY,name TEXT, wonState ID,tryCount INT, winningCode INT)")
 
 # Setting the code user should guess
 gameCode = [1, 2, 3, 4]
@@ -45,6 +45,41 @@ def index():
     return render_template("/index.html", numOfRows=rangeOfRows, numOfInputs=rangeOfInputs, enabledInput=enabledInput,\
     correctPlaces=correctPlaces, wrongPlaces=wrongPlaces, allSubmittedCodes=allSubmittedCodes, loginName=session.get("loginName"))
 
+
+@app.route("/scoreboard")
+def scoreboard():
+    # Define undesirable character
+    charsToReplace = [",", "'", "(", ")"] 
+
+    # Define name for scoreboard
+    cur.execute("SELECT name FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    scoreboardNames = list(cur.fetchall())
+    # Loop to remove undesirable characters
+    for i in range(len(scoreboardNames)):
+        scoreboardNames[i] = str(scoreboardNames[i])
+        for char in charsToReplace:
+            scoreboardNames[i] = scoreboardNames[i].replace(char, "")
+
+    # Define amount of tries for scoreboard
+    cur.execute("SELECT tryCount FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    scoreboardAmountOfTries = list(cur.fetchall())
+    # Loop to remove undesirable characters
+    for i in range(len(scoreboardAmountOfTries)):
+        scoreboardAmountOfTries[i] = str(scoreboardAmountOfTries[i])
+        for char in charsToReplace:
+            scoreboardAmountOfTries[i] = scoreboardAmountOfTries[i].replace(char, "")
+    
+    # define the winning code for scoreboard
+    cur.execute("SELECT winningCode FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    scoreboardWinningCode = list(cur.fetchall())
+    # Loop to remove undesirable characters
+    for i in range(len(scoreboardWinningCode)):
+        scoreboardWinningCode[i] = str(scoreboardWinningCode[i])
+        for char in charsToReplace:
+            scoreboardWinningCode[i] = scoreboardWinningCode[i].replace(char, "")
+
+    return render_template("/scoreboard.html",scoreboardNames=scoreboardNames,\
+    scoreboardAmountOfTries=scoreboardAmountOfTries, scoreboardWinningCode=scoreboardWinningCode, maxTries=numOfRows)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -111,13 +146,16 @@ def verify():
         name = session.get("loginName")
 
     # Redirects to a Winner page if the game was WON
+    gameCodeInt = int(''.join(map(str, gameCode)))
     if gameCode in allSubmittedCodes:
         session["resetState"] = "gameWon"
-        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount) VALUES (?, ?, ?)", (name, 1, enabledInput))
+        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
+        (name, 1, enabledInput, gameCodeInt))
         con.commit()
         return redirect("/reset")
     if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
-        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount) VALUES (?, ?, ?)", (name, 0, enabledInput))
+        cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
+        (name, 0, enabledInput, gameCodeInt))
         session["resetState"] = "gameLost"
         return redirect("/reset")
 
