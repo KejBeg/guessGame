@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<span id="table-container">
-<table id="game-table">
-    <thead id="game-table-head">
+<span id="game-table-container">
+<table>
+    <thead>
     <tr>
         <th>
             Playing filed
@@ -21,10 +21,9 @@
     <tr>
         <td>
             {% if i == enabledInput %}
-                <form name="letter-form-{{i}}" class="letter-form" id="letter-form-{{i}}" action="/verify" method="post" disabled>
-                <form name="letter-form-{{i}}" class="letter-form" id="letter-form-{{i}}" action="/verify" method="post" disabled>
+            <form name="letter-form-{{i}}" id="letter-form-{{i}}" action="/verify" method="post" disabled>
             {% else %}
-            <form name="letter-form-{{i}}" class="letter-form" id="letter-form-{{i}}" action="/verify" method="post">
+            <form name="letter-form-{{i}}" id="letter-form-{{i}}" action="/verify" method="post">
             {% endif %}
             {% for j in numOfInputs %}
             {% if i == enabledInput %}
@@ -44,10 +43,10 @@
             {% endif %}
             </form>
         </td>
-        <td class="correct-place places">
+        <td class="correct-place">
             {{correctPlaces[i]}}
         </td>
-        <td class="wrong-place places">
+        <td class="wrong-place">
             {{wrongPlaces[i]}}
         </td>
     </tr>

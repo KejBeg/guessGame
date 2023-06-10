@@ -52,7 +52,7 @@ def scoreboard():
     charsToReplace = [",", "'", "(", ")"] 
 
     # Define name for scoreboard
-    cur.execute("SELECT name FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    cur.execute("SELECT name FROM scoreboard WHERE wonState = '1';")
     scoreboardNames = list(cur.fetchall())
     # Loop to remove undesirable characters
     for i in range(len(scoreboardNames)):
@@ -61,7 +61,7 @@ def scoreboard():
             scoreboardNames[i] = scoreboardNames[i].replace(char, "")
 
     # Define amount of tries for scoreboard
-    cur.execute("SELECT tryCount FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    cur.execute("SELECT tryCount FROM scoreboard WHERE wonState = '1';")
     scoreboardAmountOfTries = list(cur.fetchall())
     # Loop to remove undesirable characters
     for i in range(len(scoreboardAmountOfTries)):
@@ -70,7 +70,7 @@ def scoreboard():
             scoreboardAmountOfTries[i] = scoreboardAmountOfTries[i].replace(char, "")
     
     # define the winning code for scoreboard
-    cur.execute("SELECT winningCode FROM scoreboard WHERE wonState = '1' LIMIT 10;")
+    cur.execute("SELECT winningCode FROM scoreboard WHERE wonState = '1';")
     scoreboardWinningCode = list(cur.fetchall())
     # Loop to remove undesirable characters
     for i in range(len(scoreboardWinningCode)):

@@ -5,24 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/style.css">
     <script src="static/main.js" defer></script>
-    <title>Excel game</title>
+    <link rel="shortcut icon" href="static/guessIcon.png" type="image/x-icon">
+    <title>Guess the Code</title>
 </head>
 <body>
     <section id="main-section">
             <nav id="navbar">
-            <span id="reset">
+            <div id="reset">
                     <form action="/reset">
                         <input type="submit" value="Reset">
                     </form>
-                </span>
+                </div>
                 
-                <span id="scoreboard">
+                <div id="site">
+                    {% if url_for(request.endpoint) == "/" %}
                     <form action="/scoreboard">
                         <input type="submit" value="Scoreboard">
                     </form>
-                </span>
+                    {% else %}
+                    <form action="/">
+                        <input type="submit" value="Game">
+                    </form>
+                    {% endif %}
+                </div>
                 
-                <span id="login">
+                <div id="login">
                 {% if loginName == None %}
                 <form action="/login" method="post" name="login-form" id="login-form">
                     <input type="text" name="login-name" placeholder="Name">
@@ -34,7 +41,7 @@
                     <input type="submit" value="Logout">
                 </form>
                 {% endif %}
-            </span>
+            </div>
         </nav>
         {% block body %}
     
