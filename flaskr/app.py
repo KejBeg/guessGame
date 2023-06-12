@@ -1,6 +1,8 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
+import random
 import sqlite3
+
 
 # Configuring FLASK
 app = Flask(__name__)
@@ -18,17 +20,29 @@ cur = con.cursor()
 tableName = "scoreboard"
 cur.execute("CREATE TABLE IF NOT EXISTS scoreboard (id INTEGER PRIMARY KEY,name TEXT, wonState ID,tryCount INT, winningCode INT)")
 
-# Setting the code user should guess
-gameCode = [1, 2, 3, 4]
-minValue = 1
-maxValue = 8
-
 # Variables
 enabledInput = 0 # Var to know with which row we deal
 numOfRows = 10 # Declare a number of rows
 numOfInputs = 4 # Declare a number for inputs
 rangeOfRows = range(numOfRows) # Create a range of rows
 rangeOfInputs = range(numOfInputs) # Create a range of inputs
+
+# Generate code
+def codeGeneration():
+    global gameCode
+    gameCode = [None for i in range(numOfInputs)]
+    for i in range(numOfInputs):
+        gameCode[i] = random.randrange(1, 8)
+        while gameCode[i] in gameCode[0:i]:
+            gameCode[i] = random.randrange(1, 8)
+    print(gameCode)
+ 
+codeGeneration()
+ 
+# Setting the code user should guess
+minValue = 1
+maxValue = 8
+
 
 allSubmittedCodes = [[0]*numOfInputs for i in rangeOfRows] # Create a 2d array for all of the codes user submitted
 correctPlaces = [0 for i in rangeOfRows] # Create an array for every row that shows how many letters user got right
@@ -140,6 +154,7 @@ def verify():
     enabledInput +=1
 
     # Getting the name
+    global name
     if not session.get("loginName"):
         name = "Anonymous"
     else:
@@ -148,14 +163,15 @@ def verify():
     # Redirects to a Winner page if the game was WON
     gameCodeInt = int(''.join(map(str, gameCode)))
     if gameCode in allSubmittedCodes:
-        session["resetState"] = "gameWon"
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
         (name, 1, enabledInput, gameCodeInt))
         con.commit()
+        session["resetState"] = "gameWon"
         return redirect("/reset")
     if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
         (name, 0, enabledInput, gameCodeInt))
+        con.commit()
         session["resetState"] = "gameLost"
         return redirect("/reset")
 
@@ -174,7 +190,7 @@ def gameWon():
     if session.get("resetState") != "gameWon":
         return redirect("/")
     session["resetState"] = None
-    return render_template("/gameWon.html", loginName=session.get("gameData")["loginName"],\
+    return render_template("/gameWon.html", loginName=name,\
     gameCode=session.get("gameData")["gameCode"], tryCount=session.get("gameData")["tryCount"],\
     maxTries=session.get("gameData")["maxTries"])
 
@@ -184,7 +200,8 @@ def gameLost():
     if session.get("resetState") != "gameLost":
         return redirect("/")
     session.get("resetState") == None
-    return render_template("/gameLost.html")
+    return render_template("/gameLost.html", loginName=name,\
+    gameCode=session.get("gameData")["gameCode"])
 
 @app.route("/reset" )
 def reset():
@@ -200,6 +217,9 @@ def reset():
         "tryCount": enabledInput,
         "maxTries": numOfRows,
     }
+
+    # Regenaration of code
+    codeGeneration()
 
     allSubmittedCodes = [[0]*numOfInputs for i in rangeOfRows] 
     correctPlaces = [0 for i in rangeOfRows] 
