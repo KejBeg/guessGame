@@ -35,6 +35,7 @@ def codeGeneration():
         gameCode[i] = random.randrange(1, 8)
         while gameCode[i] in gameCode[0:i]:
             gameCode[i] = random.randrange(1, 8)
+    print(gameCode)
  
 codeGeneration()
  
@@ -153,6 +154,7 @@ def verify():
     enabledInput +=1
 
     # Getting the name
+    global name
     if not session.get("loginName"):
         name = "Anonymous"
     else:
@@ -161,14 +163,15 @@ def verify():
     # Redirects to a Winner page if the game was WON
     gameCodeInt = int(''.join(map(str, gameCode)))
     if gameCode in allSubmittedCodes:
-        session["resetState"] = "gameWon"
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
         (name, 1, enabledInput, gameCodeInt))
         con.commit()
+        session["resetState"] = "gameWon"
         return redirect("/reset")
     if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
         (name, 0, enabledInput, gameCodeInt))
+        con.commit()
         session["resetState"] = "gameLost"
         return redirect("/reset")
 
@@ -187,7 +190,7 @@ def gameWon():
     if session.get("resetState") != "gameWon":
         return redirect("/")
     session["resetState"] = None
-    return render_template("/gameWon.html", loginName=session.get("gameData")["loginName"],\
+    return render_template("/gameWon.html", loginName=name,\
     gameCode=session.get("gameData")["gameCode"], tryCount=session.get("gameData")["tryCount"],\
     maxTries=session.get("gameData")["maxTries"])
 
@@ -197,7 +200,8 @@ def gameLost():
     if session.get("resetState") != "gameLost":
         return redirect("/")
     session.get("resetState") == None
-    return render_template("/gameLost.html")
+    return render_template("/gameLost.html", loginName=name,\
+    gameCode=session.get("gameData")["gameCode"])
 
 @app.route("/reset" )
 def reset():
@@ -206,9 +210,6 @@ def reset():
     global wrongPlaces
     global enabledInput
 
-    # Regenaration of code
-    codeGeneration()
-
     # Saving the data
     session["gameData"] = {
         "loginName": session.get("loginName"),
@@ -216,6 +217,9 @@ def reset():
         "tryCount": enabledInput,
         "maxTries": numOfRows,
     }
+
+    # Regenaration of code
+    codeGeneration()
 
     allSubmittedCodes = [[0]*numOfInputs for i in rangeOfRows] 
     correctPlaces = [0 for i in rangeOfRows] 
