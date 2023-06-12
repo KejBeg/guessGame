@@ -1,6 +1,8 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_session import Session
+import random
 import sqlite3
+
 
 # Configuring FLASK
 app = Flask(__name__)
@@ -18,17 +20,28 @@ cur = con.cursor()
 tableName = "scoreboard"
 cur.execute("CREATE TABLE IF NOT EXISTS scoreboard (id INTEGER PRIMARY KEY,name TEXT, wonState ID,tryCount INT, winningCode INT)")
 
-# Setting the code user should guess
-gameCode = [1, 2, 3, 4]
-minValue = 1
-maxValue = 8
-
 # Variables
 enabledInput = 0 # Var to know with which row we deal
 numOfRows = 10 # Declare a number of rows
 numOfInputs = 4 # Declare a number for inputs
 rangeOfRows = range(numOfRows) # Create a range of rows
 rangeOfInputs = range(numOfInputs) # Create a range of inputs
+
+# Generate code
+def codeGeneration():
+    global gameCode
+    gameCode = [None for i in range(numOfInputs)]
+    for i in range(numOfInputs):
+        gameCode[i] = random.randrange(1, 8)
+        while gameCode[i] in gameCode[0:i]:
+            gameCode[i] = random.randrange(1, 8)
+ 
+codeGeneration()
+ 
+# Setting the code user should guess
+minValue = 1
+maxValue = 8
+
 
 allSubmittedCodes = [[0]*numOfInputs for i in rangeOfRows] # Create a 2d array for all of the codes user submitted
 correctPlaces = [0 for i in rangeOfRows] # Create an array for every row that shows how many letters user got right
@@ -192,6 +205,9 @@ def reset():
     global correctPlaces
     global wrongPlaces
     global enabledInput
+
+    # Regenaration of code
+    codeGeneration()
 
     # Saving the data
     session["gameData"] = {
