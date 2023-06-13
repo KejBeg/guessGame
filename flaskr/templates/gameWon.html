@@ -4,7 +4,7 @@
 <div id="gameOver-container">
     <div>You have won</div>
     <div>Winning code: {% for code in gameCode%}{{code}}{% endfor %}</div>
-    <div>UserName: {{loginName}}</div>
+    <div>UserName: {{userName}}</div>
     <div>Tries: {{tryCount}}/{{maxTries}}</div>
     <form action="/">
         <input type="submit" value="Try Again">

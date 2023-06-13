@@ -37,6 +37,7 @@ def codeGeneration():
             gameCode[i] = random.randrange(1, 8)
     print(gameCode)
  
+# Calling the function to generate the first code
 codeGeneration()
  
 # Setting the code user should guess
@@ -92,7 +93,7 @@ def scoreboard():
         for char in charsToReplace:
             scoreboardWinningCode[i] = scoreboardWinningCode[i].replace(char, "")
 
-    return render_template("/scoreboard.html",scoreboardNames=scoreboardNames,\
+    return render_template("/scoreboard.html",loginName=session.get("loginName"),scoreboardNames=scoreboardNames,\
     scoreboardAmountOfTries=scoreboardAmountOfTries, scoreboardWinningCode=scoreboardWinningCode, maxTries=numOfRows)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -154,23 +155,23 @@ def verify():
     enabledInput +=1
 
     # Getting the name
-    global name
+    global userName
     if not session.get("loginName"):
-        name = "Anonymous"
+        userName = "Anonymous"
     else:
-        name = session.get("loginName")
+        userName = session.get("loginName")
 
     # Redirects to a Winner page if the game was WON
     gameCodeInt = int(''.join(map(str, gameCode)))
     if gameCode in allSubmittedCodes:
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
-        (name, 1, enabledInput, gameCodeInt))
+        (userName, 1, enabledInput, gameCodeInt))
         con.commit()
         session["resetState"] = "gameWon"
         return redirect("/reset")
     if 0 not in allSubmittedCodes[len(allSubmittedCodes)-1]:
         cur.execute("INSERT INTO scoreboard (name, wonState, tryCount, winningCode) VALUES (?, ?, ?, ?)",\
-        (name, 0, enabledInput, gameCodeInt))
+        (userName, 0, enabledInput, gameCodeInt))
         con.commit()
         session["resetState"] = "gameLost"
         return redirect("/reset")
@@ -190,7 +191,7 @@ def gameWon():
     if session.get("resetState") != "gameWon":
         return redirect("/")
     session["resetState"] = None
-    return render_template("/gameWon.html", loginName=name,\
+    return render_template("/gameWon.html", loginName=session.get("loginName"), userName=userName,\
     gameCode=session.get("gameData")["gameCode"], tryCount=session.get("gameData")["tryCount"],\
     maxTries=session.get("gameData")["maxTries"])
 
@@ -200,7 +201,7 @@ def gameLost():
     if session.get("resetState") != "gameLost":
         return redirect("/")
     session.get("resetState") == None
-    return render_template("/gameLost.html", loginName=name,\
+    return render_template("/gameLost.html", loginName=session.get("loginName"), userName=userName,\
     gameCode=session.get("gameData")["gameCode"])
 
 @app.route("/reset" )
