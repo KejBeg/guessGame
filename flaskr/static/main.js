@@ -63,17 +63,6 @@ function previousFocus(element){
     previousSibling.focus()
 }
 
-function checkAllInputs(event) {
-    let allChildren = Array.from(event.target.children)
-    for (let i = 0; i < allChildren.length; i++) {
-        let element = allChildren[i];
-        if (element.value == '') {
-            event.preventDefault()
-            alert("Atleast 1 input is missing")
-            return
-        }        
-    }
-}
 
 // Event listeners
 document.querySelectorAll(".letter-input").forEach(element=>
@@ -82,8 +71,4 @@ document.querySelectorAll(".letter-input").forEach(element=>
 
 document.querySelectorAll(".letter-input").forEach(element=>
     element.addEventListener('keyup', Event=>moveFocus(Event))
-)
-
-document.querySelectorAll("#game-table-container form").forEach(element=>
-    element.addEventListener('submit', Event=>checkAllInputs(Event))
 )
