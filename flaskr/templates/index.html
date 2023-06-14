@@ -28,14 +28,14 @@
             {% for j in numOfInputs %}
             {% if i == enabledInput %}
             {% if j == 0 %}
-            <input autofocus class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+            <input autofocus class="letter-input" name="letter-input-{{i}}-{{j}}" min="1" max="8" type="number" placeholder="Guess code">
             {% else %}
-            <input class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+            <input class="letter-input" name="letter-input-{{i}}-{{j}}" min="1" max="8" type="number" placeholder="Guess code">
             {% endif %}
             {% elif i < enabledInput%}
-            <input placeholder="{{allSubmittedCodes[i][j]}}" disabled class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+            <input placeholder="{{allSubmittedCodes[i][j]}}" disabled class="letter-input" name="letter-input-{{i}}-{{j}}" min="1" max="8" type="number" placeholder="Guess code">
             {% else %}
-            <input disabled class="letter-input" name="letter-input-{{i}}-{{j}}" oninput="moveFocus({{enabledInput}}); checkInput(this)" min="1" max="8" type="number" placeholder="Guess code">
+            <input disabled class="letter-input" name="letter-input-{{i}}-{{j}}" min="1" max="8" type="number" placeholder="Guess code">
             {% endif %}
             {% endfor %}
             {% if i == enabledInput %}

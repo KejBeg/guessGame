@@ -1,38 +1,70 @@
+const minValue = 1
+const maxValue = 8
+
 
 /**
- * Used to ensure the input is not out of possible Values
- * 
- * @param element 
+ * Function that check if input value is in valid range
+ * @param {Object} event
  */
-
-function checkInput(element){
+function checkInput(event){
+    let element = event.target
     if (element.value == ""){
         return
     }
-
-    if (element.value < 1){
-        element.value = 1
-    } else if (element.value > 8){
-        element.value = 8
+    
+    if (element.value < minValue){
+        element.value = minValue
+    } else if (element.value > maxValue){
+        element.value = maxValue
     }
 }
 
 /**
- * Focuses on the next Input
- * 
- * @param enabledInput int, for focusing on precise input
+ * Function that moves the focus based on input
+ * @param {Object} event 
  */
-focusIndex = 1
-function moveFocus(enabledInput){
-    element = document.getElementsByClassName("letter-input")
-
-    if (focusIndex >= element.length + enabledInput*4){
-        return
-    }
-    if (focusIndex % 4 == 0){
+function moveFocus(event){
+    let element = event.target
+    if (event.code=="ArrowLeft" && (element.value != '' || element.value != null)) {
+        previousFocus(element)
         return
     }
 
-    element[focusIndex + enabledInput*4].focus()
-    focusIndex++
+    if (event.key >= minValue && event.key <= maxValue) {
+        nextFocus(element)
+    }
 }
+
+/**
+ * function that moves focus to next element
+ * @param {Object} element 
+ */
+function nextFocus(element){
+    let nextSibling = element.nextElementSibling
+    if (nextSibling.type == 'submit') {
+        return
+    }
+    nextSibling.focus()
+}
+
+/**
+ * Function that moves focus to previous element
+ * @param {Object} element 
+ */
+function previousFocus(element){
+    let previousSibling = element.previousElementSibling
+    if (previousSibling == null || previousSibling == '') {
+        return
+    }
+    previousSibling.focus()
+}
+
+
+// Event listeners
+document.querySelectorAll(".letter-input").forEach(element=>
+    element.addEventListener('input', Event=>checkInput(Event))
+)
+
+document.querySelectorAll(".letter-input").forEach(element=>
+    element.addEventListener('keyup', Event=>moveFocus(Event))
+)

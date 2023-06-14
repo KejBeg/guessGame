@@ -185,7 +185,6 @@ def error():
         return redirect("/")
     return render_template("/error.html", errorMessage=session["errorMessage"])
     
-# TODO
 @app.route("/gameWon")
 def gameWon():
     if session.get("resetState") != "gameWon":
@@ -195,7 +194,6 @@ def gameWon():
     gameCode=session.get("gameData")["gameCode"], tryCount=session.get("gameData")["tryCount"],\
     maxTries=session.get("gameData")["maxTries"])
 
-# TODO
 @app.route("/gameLost")
 def gameLost():
     if session.get("resetState") != "gameLost":

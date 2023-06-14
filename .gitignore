@@ -4,6 +4,7 @@
 
 # Ignore flask_session
 *flaskr/flask_session`
+*flask_session
 
 # Ignore sql database
 *flaskr/scoreboard.db
